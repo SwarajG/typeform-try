@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import update from 'react/lib/update';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { Row, Col, Button, Icon } from 'antd';
+import { Row, Col, Button } from 'antd';
 import Card from './Card';
 
 const style = {
@@ -13,11 +13,24 @@ const style = {
 export default class Container extends Component {
   constructor() {
     super();
+    this.updateCardName = this.updateCardName.bind(this);
     this.moveCard = this.moveCard.bind(this);
     this.state = {
       cards: [],
     };
   }
+
+  updateCardName = (id, name) => {
+    let cardInfo = this.state.cards.map((card) => {
+      if (card.id === id) {
+        card.name = name;
+      }
+      return card;
+    });
+    this.setState({
+      cards: cardInfo,
+    });
+  };
 
   moveCard(dragIndex, hoverIndex) {
     const { cards } = this.state;
@@ -41,7 +54,8 @@ export default class Container extends Component {
     const cardList = this.state.cards;
     cardList.push({
       id: this.getUniqueIdForCard(),
-      text: item.name,
+      type: item.name,
+      name: item.name,
     });
     this.setState({
       cards: cardList,
@@ -51,6 +65,10 @@ export default class Container extends Component {
   render() {
     const { cards } = this.state;
     const list = [
+      {
+        name: "Section",
+        icon: "folder-add",
+      },
       {
         name: "Peer assignment",
         icon: "copy",
@@ -71,9 +89,9 @@ export default class Container extends Component {
             <Col span={8}>
               <ul>
                 {
-                  list.map((item) => {
+                  list.map((item, index) => {
                     return (
-                      <li>
+                      <li key={item.name + index}>
                         <Button
                           type="dashed"
                           icon={item.icon}
@@ -93,15 +111,19 @@ export default class Container extends Component {
             <Col span={16}>
               <div style={style}>
                 {
-                  cards.map((card, i) => (
-                  <Card
-                    key={card.id}
-                    index={i}
-                    id={card.id}
-                    text={card.text}
-                    moveCard={this.moveCard}
-                  />
-                  ))
+                  cards.map((card, i) => {
+                    return (
+                      <Card
+                        key={card.id}
+                        index={i}
+                        id={card.id}
+                        type={card.type}
+                        name={card.name}
+                        updateCardName={this.updateCardName}
+                        moveCard={this.moveCard}
+                      />
+                    )
+                  })
                 }
               </div>
             </Col>

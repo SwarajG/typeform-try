@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { LocaleProvider, Card, Icon } from 'antd';
+import { LocaleProvider } from 'antd';
 import 'antd/dist/antd.css';
 import enUS from 'antd/lib/locale-provider/en_US';
-import logo from './logo.svg';
 import './App.css';
 
 import { DragDropContext } from 'react-dnd';

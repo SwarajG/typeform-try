@@ -2,16 +2,24 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import { DragSource, DropTarget } from 'react-dnd';
-import { Icon, Modal, Row, Col } from 'antd';
+import {
+  Icon,
+  Modal,
+  Row,
+  Col,
+  Input,
+} from 'antd';
 import ItemTypes from './ItemTypes';
 
 const style = {
-  border: '1px dashed gray',
-  padding: '0.5rem 1rem',
-  marginBottom: '.5rem',
+  border: '1px solid',
+  padding: '8px',
+  marginBottom: '10px',
   backgroundColor: 'white',
   cursor: 'move',
   textAlign: 'left',
+  display: 'inline-block',
+  width: '300px',
 };
 
 const cardSource = {
@@ -85,23 +93,51 @@ export default class Card extends Component {
     super();
     this.state = {
       modalVisible: false,
+      modalVisibleSection: false,
+      sectionTitle: '',
     };
   }
 
-  showModal = () => {
+  showModal = (text) => {
+    if (text === 'Section') {
+      this.setState({
+        modalVisibleSection: true,
+      })
+    } else {
+      this.setState({
+        modalVisible: true,
+      });
+    }
+  }
+
+  handleOkForSection = (id) => {
+    this.props.updateCardName(id, this.state.sectionTitle);
     this.setState({
-      modalVisible: true,
+      modalVisibleSection: false,
     });
   }
-  handleOk = (e) => {
-    this.setState({
-      modalVisible: false,
-    });
+
+  handleOk = (text, id, titleText) => {
+    if (text === 'Section') {
+      this.setState({
+        modalVisibleSection: false,
+      });
+    } else {
+      this.setState({
+        modalVisible: false,
+      });
+    }
   }
-  handleCancel = (e) => {
-    this.setState({
-      modalVisible: false,
-    });
+  handleCancel = (text) => {
+    if (text === 'Section') {
+      this.setState({
+        modalVisibleSection: false,
+      })
+    } else {
+      this.setState({
+        modalVisible: false,
+      });
+    }
   }
   getPageHeight = () => {
     return window.innerHeight;
@@ -109,6 +145,12 @@ export default class Card extends Component {
   getPageWidth = () => {
     return window.innerWidth;
   }
+  sectionTitleUpdate = (e) => {
+    this.setState({
+      sectionTitle: e.target.value,
+    });
+  }
+
   showConfirm = () => {
     confirm({
       title: 'Want to delete these items?',
@@ -123,14 +165,15 @@ export default class Card extends Component {
 }
 
   render() {
-    const { text, isDragging, connectDragSource, connectDropTarget } = this.props;
+    const { type, isDragging, connectDragSource, connectDropTarget, id, name } = this.props;
     const opacity = isDragging ? 0 : 1;
+    const marginLeft = (type !== 'Section') ? '40px' : '0px';
 
     return connectDragSource(connectDropTarget(
       <div>
         <Modal
           visible={this.state.modalVisible}
-          onOk={this.handleOk} onCancel={this.handleCancel}
+          onOk={() => this.handleOk(type)} onCancel={() => this.handleCancel(type)}
           width={this.getPageWidth() - 60}
           style={{ margin: '30px' }}
         >
@@ -145,19 +188,36 @@ export default class Card extends Component {
             </Col>
           </Row>
         </Modal>
-        <div style={{ ...style, opacity }}>
-          {text}
-          <div style={{ float: 'right' }}>
-            <Icon
-              type="edit"
-              style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px' }}
-              onClick={this.showModal}
-            />
-            <Icon
-              type="delete"
-              style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px' }}
-              onClick={() => this.showConfirm()}
-            />
+        <Modal
+          visible={this.state.modalVisibleSection}
+          title="Add section title"
+          onOk={() => this.handleOkForSection(id)} onCancel={() => this.handleCancel(type)}
+        >
+          <Input
+            placeholder="Section name"
+            onChange={(e) => this.sectionTitleUpdate(e)}
+          />
+        </Modal>
+        <div
+          style={{ display: 'flex' }}
+        >
+          <div style={{ padding: '10px', marginRight: '10px', display: 'inline-block', border: '1px solid', marginLeft: marginLeft, height: '100%' }}>
+            {this.props.index + 1}
+          </div>
+          <div style={{ ...style, opacity }}>
+            {name}
+            <div style={{ float: 'right' }}>
+              <Icon
+                type="edit"
+                style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px' }}
+                onClick={() => this.showModal(type)}
+              />
+              <Icon
+                type="delete"
+                style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px' }}
+                onClick={() => this.showConfirm()}
+              />
+            </div>
           </div>
         </div>
       </div>,

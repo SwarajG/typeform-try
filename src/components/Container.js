@@ -52,15 +52,15 @@ export default class Container extends Component {
     const { cards } = this.state;
     const list = [
       {
-        name: "peer assignment",
+        name: "Peer assignment",
         icon: "copy",
       },
       {
-        name: "learning assignment",
+        name: "Learning assignment",
         icon: "book",
       },
       {
-        name: "quiz assignment",
+        name: "Quiz assignment",
         icon: "save",
       },
     ];

@@ -15,7 +15,6 @@ const style = {
   border: '1px solid',
   padding: '8px',
   marginBottom: '10px',
-  backgroundColor: 'white',
   cursor: 'move',
   textAlign: 'left',
   display: 'inline-block',
@@ -151,23 +150,32 @@ export default class Card extends Component {
     });
   }
 
-  showConfirm = () => {
+  showConfirm = (type, id) => {
     confirm({
-      title: 'Want to delete these items?',
-      content: 'When clicked the OK button, this dialog will be closed after 1 second',
-      onOk() {
-        return new Promise((resolve, reject) => {
-          setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-        }).catch(() => console.log('Oops errors!'));
+      title: 'Want to delete these card?',
+      content: 'This wil delete the card from the list. Are you sure?',
+      onOk: () => {
+        this.props.deleteCardFromList(type, id);
       },
-      onCancel() {},
+      onCancel: () => {},
     });
-}
+  }
+
+  onSectionClick = (type, id) => {
+    if (type === 'Section') {
+      this.setState({
+        activeSection: id,
+      });
+      this.props.makeActiveSection(id);
+    }
+  }
 
   render() {
-    const { type, isDragging, connectDragSource, connectDropTarget, id, name } = this.props;
+    const { type, isDragging, connectDragSource, connectDropTarget, id, name, activeSectionId } = this.props;
     const opacity = isDragging ? 0 : 1;
     const marginLeft = (type !== 'Section') ? '40px' : '0px';
+    const bgColor = (activeSectionId === id) ? '#3498db' : 'white';
+    const color = (activeSectionId === id) ? 'white' : 'black';
 
     return connectDragSource(connectDropTarget(
       <div>
@@ -202,9 +210,12 @@ export default class Card extends Component {
           style={{ display: 'flex' }}
         >
           <div style={{ padding: '10px', marginRight: '10px', display: 'inline-block', border: '1px solid', marginLeft: marginLeft, height: '100%' }}>
-            {this.props.index + 1}
+            {this.props.number}
           </div>
-          <div style={{ ...style, opacity }}>
+          <div
+            style={{ ...style, opacity, backgroundColor: bgColor, color: color }}
+            onClick={() => this.onSectionClick(type, id)}
+          >
             {name}
             <div style={{ float: 'right' }}>
               <Icon
@@ -215,7 +226,7 @@ export default class Card extends Component {
               <Icon
                 type="delete"
                 style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px' }}
-                onClick={() => this.showConfirm()}
+                onClick={() => this.showConfirm(type, id)}
               />
             </div>
           </div>
@@ -226,11 +237,7 @@ export default class Card extends Component {
 }
 
 Card.propTypes = {
-  connectDragSource: PropTypes.func.isRequired,
-  connectDropTarget: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
-  isDragging: PropTypes.bool.isRequired,
   id: PropTypes.any.isRequired,
-  text: PropTypes.string.isRequired,
   moveCard: PropTypes.func.isRequired,
 };

@@ -15,8 +15,10 @@ export default class Container extends Component {
     super();
     this.updateCardName = this.updateCardName.bind(this);
     this.moveCard = this.moveCard.bind(this);
+    this.deleteCardFromList = this.deleteCardFromList.bind(this);
     this.state = {
       cards: [],
+      activeSectionId: '',
     };
   }
 
@@ -50,20 +52,92 @@ export default class Container extends Component {
     return new Date().getUTCMilliseconds();
   }
 
+  makeActiveSection = (id) => {
+    this.setState({
+      activeSectionId: id,
+    });
+  }
+
   addSection(item) {
     const cardList = this.state.cards;
-    cardList.push({
-      id: this.getUniqueIdForCard(),
-      type: item.name,
-      name: item.name,
+    const id = this.getUniqueIdForCard();
+    let findSection = false;
+    let indexForNewCard;
+    if (item.name === 'Section') {
+      this.setState({
+        activeSectionId: id,
+      });
+    }
+    cardList.forEach((card, index) => {
+      if (findSection && card.type === 'Section') {
+        indexForNewCard = index;
+        findSection = false;
+      }
+      if (card.id === this.state.activeSectionId) {
+        findSection = true;
+      }
     });
+    if (item.name !== 'Section' && indexForNewCard !== undefined) {
+      cardList.splice(indexForNewCard, 0, {
+        id: id,
+        type: item.name,
+        name: item.name,
+      });
+    } else if (indexForNewCard === undefined) {
+      cardList.push({
+        id: id,
+        type: item.name,
+        name: item.name,
+      });
+    }
     this.setState({
       cards: cardList,
     });
   }
 
+  deleteCardFromList = (type, id) => {
+    let { cards } = this.state;
+    let cardList = [];
+    if (type === 'Section') {
+      let startingIndex, endingIndex;
+      cards.forEach((card, index) => {
+        if (startingIndex !== undefined && card.type === 'Section') {
+          endingIndex = index - 1;
+        }
+        if (card.id === id) {
+          startingIndex = index;
+        }
+      });
+      if (endingIndex === undefined) {
+        endingIndex = cards.length;
+      }
+      cards.forEach((card, index) => {
+        if (!(index >= startingIndex && index <= endingIndex)) {
+          cardList.push(card);
+        }
+      });
+    } else {
+      let cardsIndex;
+      cards.forEach((card, index) => {
+        if (card.id === id) {
+          cardsIndex = index;
+        }
+      });
+      cards.forEach((card, index) => {
+        if (cardsIndex !== index) {
+          cardList.push(card);
+        }
+      });
+    }
+    this.setState({
+      cards: cardList,
+    });
+  };
+
   render() {
-    const { cards } = this.state;
+    const { cards, activeSectionId } = this.state;
+    let sectionNumber = 0;
+    let assignmentNumber = 1;
     const list = [
       {
         name: "Section",
@@ -112,15 +186,28 @@ export default class Container extends Component {
               <div style={style}>
                 {
                   cards.map((card, i) => {
+                    let index;
+                    if (card.type === 'Section') {
+                      index = sectionNumber + 1;
+                      sectionNumber++;
+                      assignmentNumber = 1;
+                    } else {
+                      index = `${sectionNumber}.${assignmentNumber}`;
+                      assignmentNumber++;
+                    }
                     return (
                       <Card
                         key={card.id}
                         index={i}
+                        number={index}
                         id={card.id}
                         type={card.type}
                         name={card.name}
                         updateCardName={this.updateCardName}
                         moveCard={this.moveCard}
+                        makeActiveSection={this.makeActiveSection}
+                        activeSectionId={activeSectionId}
+                        deleteCardFromList={this.deleteCardFromList}
                       />
                     )
                   })

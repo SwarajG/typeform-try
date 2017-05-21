@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Icon, Input, Button, Checkbox, InputNumber } from 'antd';
 import { Switch } from 'antd';
+import { Radio } from 'antd';
+const RadioGroup = Radio.Group;
 
 class NormalAssignment extends React.Component {
 	constructor(props) {
@@ -14,9 +16,10 @@ class NormalAssignment extends React.Component {
     		Duration: 0,
     		Mandetory: false,
     		reAttempt: false,
-    		Lock: true,
-    		LockLessons: [],
-    		PassingMarks: 0
+    		Lock: false,
+    		LockLessons: [0],
+    		PassingMarks: 0,
+    		questions: []
     	}
 
     	this.handleInputChange1 = this.handleInputChange1.bind(this);
@@ -27,8 +30,19 @@ class NormalAssignment extends React.Component {
     	this.handleChangeLock = this.handleChangeLock.bind(this);
     	this.addLockLesson = this.addLockLesson.bind(this);
     	this.handlePassingMarks = this.handlePassingMarks.bind(this);
+    	this.handleLockedLessons = this.handleLockedLessons.bind(this);
+    	this.handleRemoveLockLessons = this.handleRemoveLockLessons.bind(this);
+    	this.addMCQ = this.addMCQ.bind(this);
+    	this.addNormalQuestion = this.addNormalQuestion.bind(this);
+    	this.Removequestions = this.Removequestions.bind(this);
+    	this.handleResponseFormat = this.handleResponseFormat.bind(this);
+    	this.handleQuestionInput = this.handleQuestionInput.bind(this);
 
-
+    	this.addOption = this.addOption.bind(this);
+    	this.Removequestions = this.Removequestions.bind(this);
+    	this.handleOptionChange = this.handleOptionChange.bind(this);
+    	this.handleOptionCheck = this.handleOptionCheck.bind(this);
+    	this.handleOptionScore = this.handleOptionScore.bind(this);
   	}
 
 
@@ -61,16 +75,14 @@ class NormalAssignment extends React.Component {
   	}
 
   	handleChangeMandetory(event){
-  	
-	    this.setState({
+  		this.setState({
 	  		Mandetory: event
 	  	})
 		console.log(this.state);
   	}
 
   	handleChangeReAttempt(event){
-  	
-	    this.setState({
+  		this.setState({
 	  		reAttempt: event
 	  	})
 		console.log(this.state);
@@ -80,7 +92,7 @@ class NormalAssignment extends React.Component {
 	  	this.setState({
 	  		Lock: event
 	  	})
-    console.log(this.state);
+    	console.log(this.state);
     
   	}
 
@@ -90,7 +102,9 @@ class NormalAssignment extends React.Component {
 	  	array.push(1);
 	  	this.setState({
 	  		LockLessons : array 
-  	})
+  		})
+  		console.log('Should be Added',this.state);
+
 
   	}
 
@@ -101,8 +115,147 @@ class NormalAssignment extends React.Component {
     	console.log(this.state);
   	}
 
+  	handleLockedLessons(event, index){
+		var array = this.state.LockLessons;
+  		array[index] = event;
+  		this.setState({
+  			LockLessons : array
+  		})
+  		console.log('Value Should be Changed at'+index,this.state);
+  	}
+
+  	handleRemoveLockLessons(index){
+  		var array = this.state.LockLessons;
+  		if(array.length ===1)
+  			return;
+
+  		array = array.filter((key,i) => i!==index);
+  		this.setState({
+  			LockLessons : array
+  		} )	
+  		console.log('Should be Deleted at'+index,this.state);
+
+  	}
+
+  	addMCQ(){
+  		var array = this.state.questions;
+  		var obj2 = {
+  			correct: false,
+  			relativeScore: 0,
+  			text: ''
+  		}
+  		var obj = {
+  			type: 1,
+  			question: '',
+  			options: [obj2 ,obj2],
+  			rtype: 0
+  		}
+  		array.push(obj);
+
+  		this.setState({
+  			questions : array
+  		})
+
+  		console.log(array)
+  	}
+
+  	addNormalQuestion(){
+  		var array = this.state.questions;
+  		var obj = {
+  			type: 2,
+  			question: '',
+  			options: [],
+  			rtype: 1
+  		}
+  		array.push(obj);
+
+  		this.setState({
+  			questions : array
+  		})
+  	}
+
+  	Removequestions(index){
+  		var array = this.state.questions;
+  		if(array.length ===1)
+  			return;
+
+  		array = array.filter((key,i) => i!==index);
+  		this.setState({
+  			questions : array
+  		} )	
+  		console.log('QUestion Should be Deleted at'+index,this.state);
+  	}
+
+  	handleResponseFormat(event,index){
+  		var array = this.state.questions;
+  		array[index].rtype = event.target.value;
+  		this.setState({
+  			questions : array
+  		})
+
+  		console.log(this.state.questions);
+  	}
+
+  	handleQuestionInput(event,index){
+  		var array = this.state.questions;
+  		array[index].question = event.target.value;
+  		this.setState({
+  			questions : array
+  		})
+  	}
+
+  	addOption(event,index){
+  		var array = this.state.questions;
+  		var obj2 = {
+  			correct: false,
+  			relativeScore: 0,
+  			text: ''
+  		}
+  		array[index].options.push(obj2);
+
+  		this.setState({
+  			questions : array
+  		})
+  	}
+
+  	RemoveOptions(i,j){
+  		var array = this.state.questions;
+  		var question = array[i];
+		var options = question.options.filter((key,ind) => ind!==j);
+		array[i].options = options;
+
+		this.setState({
+			questions : array
+		})
+  	}
+
+  	handleOptionChange(event,i,j){
+  		var array = this.state.questions;
+  		array[i].options[j].text = event.target.value;
+  		this.setState({
+  			questions: array
+  		})
+  	}
+
+  	handleOptionCheck(event,i,j){
+  		var array = this.state.questions;
+  		array[i].options[j].correct = event;
+  		this.setState({
+  			questions: array
+  		})
+  	}
+
+  	handleOptionScore(event,i,j){
+  		var array = this.state.questions;
+  		array[i].options[j].relativeScore = event;
+  		this.setState({
+  			questions: array
+  		})
+  	}
+
   	render(){
   	    var ll = this.state.LockLessons;
+  	    var questions = this.state.questions;
   	    return (
 	  		<div>
 		      <h2> Normal Assignment Form</h2>
@@ -116,9 +269,69 @@ class NormalAssignment extends React.Component {
 		        	<InputNumber name="Marks" min={0} max={100000} defaultValue={this.state.Marks} onChange={this.handleMarks} />
 		        </label>
 		        <br />
-		        <label>
-		        Dynamic Questions
-		        </label>
+		        <div>
+			        <label>
+			        	Add Questions for this assignment:<br />
+			        	{
+			        		questions.map(function(q,index){
+			        			return(
+			        				<span key={index}>
+			        					<label>
+			        						Question {index+1}:
+			        						<Input defaultValue={q.question} placeholder="Enter Question Text Here" onChange={(e)=>this.handleQuestionInput(e,index)}> 
+			        						</Input>
+
+			        					</label><br />
+			        					<Icon type="minus-circle-o" onClick={()=>this.Removequestions(index)} disabled={questions.length===1}> </Icon>
+			        					{
+			        						(q.type===1)?
+			        						 <span> Add Options here. <br/>Check the option if they are the correct Choices. <br/>Enter Relative Score for each.<br/>
+												{
+													q.options.map(function(option,ind){
+														return(
+															<span>
+																
+																Option {ind+1} :
+																<Input defaultValue={option.text}  onChange={(e)=>this.handleOptionChange(e,index,ind)}>
+																</Input>
+																
+																<Checkbox defaultValue={option.correct} onChange={(e)=>this.handleOptionCheck(e,index,ind)}/>
+																<InputNumber defaultValue={option.relativeScore} onChange={(e)=>this.handleOptionScore(e,index,ind)}/> 
+																<Icon type="minus-circle-o" onClick={()=>this.RemoveOptions(index,ind)} disabled={questions.length===2}> </Icon>
+																<br />
+															</span>
+
+														);
+													},this)
+												}
+				        						<Button type="dashed" onClick={(e)=>this.addOption(e,index)}>
+				        							<Icon type="plus"/>Add Option
+				        						</Button>
+				        						<br/>
+			        						 </span>: 
+			        						 <span>
+			        						 	<RadioGroup onChange={(e)=>this.handleResponseFormat(e,index)} value={q.rtype}>
+											        <Radio value={1}>Text</Radio>
+											        <Radio value={2}>Image</Radio>
+											        <Radio value={3}>Audio</Radio>
+											        <Radio value={4}>Video</Radio>
+										      	</RadioGroup><br/>
+			        						 </span>
+			        					}
+			        				</span>
+			        			);
+			        		},this)
+			        	}
+			        	<Button type="dashed" onClick={this.addMCQ}>
+				        	<Icon type="plus"/>Add Multiple Choice Question
+				        </Button>
+				         or  
+				        <Button type="dashed" onClick={this.addNormalQuestion}>
+				        	<Icon type="plus"/>Add Normal Question
+				        </Button>
+
+			        </label>
+		        </div>
 		        
 		        <label>
 		        	<h3>Other Details of the Lesson</h3>
@@ -160,15 +373,25 @@ class NormalAssignment extends React.Component {
 			        	<label>
 			        		Lessons To Unlock this Lesson<br />
 			        		{   
-		        			ll.map(function(item){
-		        			return (
-		        				<span><InputNumber /><br/></span>
-		        			);
-		        			},this)}
+			        			ll.map(function(item,index){
+				        			return (
+				        				<span key={index}>
+					        				<label>	
+					        				Section No.
+					        					<InputNumber min={0} step={0.01} onChange={(e)=>this.handleLockedLessons(e,index)}/>
+					        				</label>
+					        				<Icon type="minus-circle-o" onClick={()=>this.handleRemoveLockLessons(index)} disabled={ll.length===1}>
+					        				</Icon>
+				        					<br />
+				        				</span>
+				        			);
+			        			},this)
+		        			}
 			        		<br />
 			        		<Button type="dashed" onClick={this.addLockLesson}>
-			        			<Icon type="plus"/>Add Lesson Number
+			        			<Icon type="plus"/>Add Lesson
 			        		</Button>
+			        		
 			        	</label>
 		        	</div> 
 		        }

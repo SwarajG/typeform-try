@@ -122,6 +122,27 @@ class PeerAssignment extends React.Component {
     	console.log(this.state);
   	}
 
+  	handleLockedLessons(event, index){
+
+  		var array = this.state.LockLessons;
+  		array[index] = event;
+  		this.setState({
+  			LockLessons : array
+  		})
+  		console.log(this.state);
+  	}
+
+  	handleRemoveLockLessons(index){
+  		var array = this.state.LockLessons;
+  		if(array.length ===1)
+  			return;
+
+  		array = array.filter((key,i) => key!==index);
+  		this.setState({
+  			LockLessons : array
+  		})	
+  	}
+
   	render(){
   	    var ll = this.state.LockLessons;
   	    return (
@@ -130,7 +151,7 @@ class PeerAssignment extends React.Component {
 		      <form>
 		        <label>
 		       	Assignment Name:
-		        	<Input name="AssignName" defaultValue = {this.state.AssignName} placeholder="Enter Lesson Name Here" onChange={this.handleInputChange1}/> 	
+		        	<Input name="AssignName" defaultValue={this.state.AssignName} placeholder="Enter Lesson Name Here" onChange={this.handleInputChange1}/> 	
 		        </label>
 		        <label>
 		        Marks:
@@ -197,11 +218,20 @@ class PeerAssignment extends React.Component {
 			        	<label>
 			        		Lessons To Unlock this Lesson<br />
 			        		{   
-		        			ll.map(function(item){
-		        			return (
-		        				<span><InputNumber /><br/></span>
-		        			);
-		        			},this)}
+			        			ll.map(function(item,index){
+				        			return (
+				        				<span>
+	                                        <label> 
+	                                        Section No.
+	                                            <InputNumber min={0} step={0.01} onChange={(e)=>this.handleLockedLessons(e,index)}/>
+	                                        </label>
+	                                        <Icon type="minus-circle-o" onClick={()=>this.handleRemoveLockLessons(index)} disabled={ll.length===1}>
+	                                        </Icon>
+		                                    <br />
+		                                </span>
+				        			);
+			        			},this)
+		        			}
 			        		<br />
 			        		<Button type="dashed" onClick={this.addLockLesson}>
 			        			<Icon type="plus"/>Add Lesson Number

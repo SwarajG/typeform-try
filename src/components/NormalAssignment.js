@@ -11,6 +11,8 @@ import {
 	Radio,
 } from 'antd';
 
+import Appcss from '../App.css';
+
 const RadioGroup = Radio.Group;
 
 export default class NormalAssignment extends React.Component {
@@ -234,21 +236,24 @@ export default class NormalAssignment extends React.Component {
 	    let questions = this.state.questions;
 	    return (
 	  		<div>
-		      <h2> Normal Assignment Form</h2>
-		      <form>
+		      <h2 style={{ backgroundColor: '#bdc3c7', padding: '10px', color: '#34495e', marginBottom: '10px' }}>Normal Assignment Form</h2>
+		      <form style={{ maxHeight: '450px', overflow: 'auto' }} >
 		        <label>
-		       		Assignment Name:
+							<span className="label__title">Assignment name: </span>
 		        	<Input
 								name="AssignName"
+								className="label__input"
 								defaultValue={this.state.AssignName}
-								placeholder="Enter Lesson Name Here"
+								placeholder="Enter lesson name here"
 								onChange={this.handleInputChange1}
 							/>
 		        </label>
+						<br />
 		        <label>
-		        	Maximum Marks:
+							<span className="label__title">Maximum marks: </span>
 		        	<InputNumber
 								name="Marks"
+								className="label__input"
 								min={0}
 								max={100000}
 								defaultValue={this.state.Marks}
@@ -258,14 +263,16 @@ export default class NormalAssignment extends React.Component {
 		        <br />
 		        <div>
 			        <label>
-			        	Add Questions for this assignment:<br />
+								<span className="label__title">Add questions for this assignment: </span>
+			        	<br />
 			        	{
 			        		questions.map((q,index) => {
 			        			return(
 			        				<span key={index}>
 			        					<label>
-			        						Question {index+1}:
+													<span className="label__title">Question {index+1}: </span>
 			        						<Input
+														className="label__input"
 														defaultValue={q.question}
 														placeholder="Enter Question Text Here"
 														onChange={(e)=>this.handleQuestionInput(e,index)}
@@ -279,21 +286,24 @@ export default class NormalAssignment extends React.Component {
 												/>
 			        					{
 			        						(q.type === 1) ?
-			        						 <span> Add Options here. <br/>Check the option if they are the correct Choices. <br/>Enter Relative Score for each.<br/>
+			        						 <span> Add options here. <br/>Check the option if they are the correct choices. <br/>Enter relative score for each.<br/>
 												{
-													q.options.map(function(option,ind){
+													q.options.map((option,ind) => {
 														return(
 															<span>
-																Option {ind+1} :
+																<span className="label__title">Option {ind+1}: </span>
 																<Input
+																	className="label__input"
 																	defaultValue={option.text}
 																	onChange={(e)=>this.handleOptionChange(e,index,ind)}
 																/>
 																<Checkbox
+																	className="label__input"
 																	defaultValue={option.correct}
 																	onChange={(e)=>this.handleOptionCheck(e,index,ind)}
 																/>
 																<InputNumber
+																	className="label__input"
 																	defaultValue={option.relativeScore}
 																	onChange={(e)=>this.handleOptionScore(e,index,ind)}
 																/>
@@ -308,12 +318,16 @@ export default class NormalAssignment extends React.Component {
 													},this)
 												}
 		        						<Button type="dashed" onClick={(e)=>this.addOption(e,index)}>
-		        							<Icon type="plus"/>Add Option
+		        							<Icon type="plus"/> Add option
 		        						</Button>
 				        				<br/>
 			        					</span>:
 			        						 <span>
-			        						 	<RadioGroup onChange={(e)=>this.handleResponseFormat(e,index)} value={q.rtype}>
+			        						 	<RadioGroup
+															onChange={(e)=>this.handleResponseFormat(e,index)}
+															value={q.rtype}
+															className="label__input"
+														>
 											        <Radio value={1}>Text</Radio>
 											        <Radio value={2}>Image</Radio>
 											        <Radio value={3}>Audio</Radio>
@@ -325,43 +339,48 @@ export default class NormalAssignment extends React.Component {
 			        			);
 			        		},this)
 			        	}
-			        	<Button type="dashed" onClick={this.addMCQ}>
-				        	<Icon type="plus"/>Add Multiple Choice Question
+			        	<Button type="dashed" onClick={this.addMCQ} style={{ marginBottom: '10px' }}>
+				        	<Icon type="plus"/> Add multiple choice question
 				        </Button>
-				         or
+				         <span> or </span>
 				        <Button type="dashed" onClick={this.addNormalQuestion}>
-				        	<Icon type="plus"/>Add Normal Question
+				        	<Icon type="plus"/> Add normal question
 				        </Button>
-
 			        </label>
 		        </div>
 		        <label>
-		        	<h3>Other Details of the Lesson</h3>
+		        	<h3>Other details of the lesson</h3>
 		        </label>
 		        <label>
-		        	Minimum passing marks:
+							<span className="label__title">Minimum passing marks: </span>
 		        	<InputNumber
 								name="PassingMarks"
+								className="label__input"
 								min={0}
 								max={100000}
 								defaultValue={this.state.PassingMarks}
 								onChange={this.handlePassingMarks}
 							/>
 		        </label>
+						<br />
 		        <label>
-		        	Skills:
+							<span className="label__title label__textarea-title">Skills: </span>
+							<br />
 		        	<Input
 								name="Skills"
+								className="label__textarea"
 								type="textarea"
 								placeholder="Enter Skills that this lesson Addresses"
 								autosize
 								onChange={this.handleInputChange1}
 							/>
 		        </label>
+						<br />
 		        <label>
-		        	Duration:
+							<span className="label__title">Duration: </span>
 		        	<InputNumber
 								name="Duration"
+								className="label__input"
 								min={0}
 								max={100000}
 								defaultValue={this.state.Duration}
@@ -370,9 +389,10 @@ export default class NormalAssignment extends React.Component {
 		        </label>
 		        <br />
 		        <label>
-		        	Mandetory:
+							<span className="label__title">Mandetory: </span>
 							<Switch
 								name="Mandetory"
+								className="label__input"
 								checkedChildren={<Icon type="check" />}
 								unCheckedChildren={<Icon type="close" />}
 								defaultChecked={this.state.Mandetory}
@@ -381,9 +401,10 @@ export default class NormalAssignment extends React.Component {
 		        </label>
 		        <br />
 		        <label>
-		        	Re-Attempt:
+							<span className="label__title">Re-attempt: </span>
 							<Switch
 								name="reAttempt"
+								className="label__input"
 								checkedChildren={<Icon type="check" />}
 								unCheckedChildren={<Icon type="close" />}
 								defaultChecked={this.state.reAttempt}
@@ -392,9 +413,10 @@ export default class NormalAssignment extends React.Component {
 		        </label>
 		        <br />
 		        <label>
-		        	Lock the Lesson:
+							<span className="label__title">Lock the lesson: </span>
 							<Switch
 								name="Lock"
+								className="label__input"
 								checkedChildren={<Icon type="lock" />}
 								unCheckedChildren={<Icon type="unlock"  />}
 								defaultChecked={this.state.Lock}
@@ -405,14 +427,16 @@ export default class NormalAssignment extends React.Component {
 							this.state.Lock &&
 		        	<div>
 			        	<label>
-			        		Lessons To Unlock this Lesson<br />
+									<span className="label__title">Lessons to unlock this lesson</span>
+			        		<br />
 			        		{
 			        			ll.map((item,index) => {
 				        			return (
 				        				<span key={index}>
 					        				<label>
-					        				Section No.
+														<span className="label__title">Section no. </span>
 					        					<InputNumber
+															className="label__input"
 															min={0}
 															step={0.01}
 															onChange={(e)=>this.handleLockedLessons(e,index)}
@@ -430,7 +454,7 @@ export default class NormalAssignment extends React.Component {
 		        			}
 			        		<br />
 			        		<Button type="dashed" onClick={this.addLockLesson}>
-			        			<Icon type="plus"/> Add Lesson
+			        			<Icon type="plus"/> Add lesson
 			        		</Button>
 			        	</label>
 		        	</div>

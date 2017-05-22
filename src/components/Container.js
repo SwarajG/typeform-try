@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import update from 'react/lib/update';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { Row, Col, Button } from 'antd';
+import {
+  Row,
+  Col,
+  Button,
+  message,
+} from 'antd';
 import Card from './Card';
 
 const style = {
@@ -58,9 +63,17 @@ export default class Container extends Component {
     });
   }
 
+  error = () => {
+    message.error('Please add section first');
+  };
+
   addSection(item) {
     const cardList = this.state.cards;
     const id = this.getUniqueIdForCard();
+    if (cardList.length === 0 && item.name !== 'Section') {
+      this.error();
+      return ;
+    }
     let findSection = false;
     let indexForNewCard;
     if (item.name === 'Section') {

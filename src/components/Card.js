@@ -13,6 +13,7 @@ import ItemTypes from './ItemTypes';
 import LearningLesson from './LearningLesson';
 import NormalAssignment from './NormalAssignment';
 import PeerAssignment from './PeerAssignment';
+import Appcss from '../App.css';
 
 const style = {
   border: '1px solid',
@@ -97,17 +98,20 @@ export default class Card extends Component {
       modalVisible: false,
       modalVisibleSection: false,
       sectionTitle: '',
+      modalType: '',
     };
   }
 
-  showModal = (text) => {
-    if (text === 'Section') {
+  showEditModal = (type, id) => {
+    if (type === 'Section') {
       this.setState({
         modalVisibleSection: true,
+        modalType: type,
       })
     } else {
       this.setState({
         modalVisible: true,
+        modalType: type,
       });
     }
   }
@@ -130,6 +134,7 @@ export default class Card extends Component {
       });
     }
   }
+
   handleCancel = (text) => {
     if (text === 'Section') {
       this.setState({
@@ -141,12 +146,15 @@ export default class Card extends Component {
       });
     }
   }
+
   getPageHeight = () => {
     return window.innerHeight;
   }
+
   getPageWidth = () => {
     return window.innerWidth;
   }
+
   sectionTitleUpdate = (e) => {
     this.setState({
       sectionTitle: e.target.value,
@@ -173,6 +181,17 @@ export default class Card extends Component {
     }
   }
 
+  getFormComponentFromType = () => {
+    const type = this.state.modalType;
+    if (type === 'Peer assignment') {
+      return <PeerAssignment />;
+    } else if (type === 'Learning assignment') {
+      return <LearningLesson />;
+    } else if (type === 'Quiz assignment') {
+      return <NormalAssignment />;
+    }
+  }
+
   render() {
     const { type, isDragging, connectDragSource, connectDropTarget, id, name, activeSectionId } = this.props;
     const opacity = isDragging ? 0 : 1;
@@ -184,14 +203,18 @@ export default class Card extends Component {
       <div>
         <Modal
           visible={this.state.modalVisible}
+          wrapClassName="vertical-center-modal"
           onOk={() => this.handleOk(type)} onCancel={() => this.handleCancel(type)}
           width={this.getPageWidth() - 60}
           style={{ margin: '30px' }}
+          footer={null}
         >
           <Row>
             <Col span={8}>
-              <div style={{ borderRight: '1px solid' }}>
-                Hello World. This will be the configuration part
+              <div style={{ borderRight: '1px solid', paddingRight: '10px' }}>
+                {
+                  this.getFormComponentFromType()
+                }
               </div>
             </Col>
             <Col span={16}>
@@ -202,7 +225,8 @@ export default class Card extends Component {
         <Modal
           visible={this.state.modalVisibleSection}
           title="Add section title"
-          onOk={() => this.handleOkForSection(id)} onCancel={() => this.handleCancel(type)}
+          onOk={() => this.handleOkForSection(id)}
+          onCancel={() => this.handleCancel(type)}
         >
           <Input
             placeholder="Section name"
@@ -212,11 +236,11 @@ export default class Card extends Component {
         <div
           style={{ display: 'flex' }}
         >
-          <div style={{ padding: '10px', marginRight: '10px', display: 'inline-block', border: '1px solid', marginLeft: marginLeft, height: '100%' }}>
+          <div style={{ padding: '10px', marginRight: '10px', display: 'inline-block', border: '1px solid', marginLeft: marginLeft, height: '100%', borderRadius: '3px', }}>
             {this.props.number}
           </div>
           <div
-            style={{ ...style, opacity, backgroundColor: bgColor, color: color }}
+            style={{ ...style, opacity, backgroundColor: bgColor, color: color, borderRadius: '3px', }}
             onClick={() => this.onSectionClick(type, id)}
           >
             {name}
@@ -224,7 +248,7 @@ export default class Card extends Component {
               <Icon
                 type="edit"
                 style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px' }}
-                onClick={() => this.showModal(type)}
+                onClick={() => this.showEditModal(type, id)}
               />
               <Icon
                 type="delete"

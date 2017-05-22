@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Icon, Input, Button, Checkbox, InputNumber } from 'antd';
-import { Switch } from 'antd';
-import { Radio } from 'antd';
+import {
+	Form,
+	Icon,
+	Input,
+	Button,
+	Checkbox,
+	InputNumber,
+	Switch,
+	Radio,
+} from 'antd';
+
 const RadioGroup = Radio.Group;
 
-class NormalAssignment extends React.Component {
+export default class NormalAssignment extends React.Component {
 	constructor(props) {
     	super(props);
-
     	this.state={
     		AssignName : '',
     		Marks: 0,
@@ -21,7 +28,6 @@ class NormalAssignment extends React.Component {
     		PassingMarks: 0,
     		questions: []
     	}
-
     	this.handleInputChange1 = this.handleInputChange1.bind(this);
     	this.handleMarks = this.handleMarks.bind(this);
     	this.handleDuration = this.handleDuration.bind(this);
@@ -37,7 +43,6 @@ class NormalAssignment extends React.Component {
     	this.Removequestions = this.Removequestions.bind(this);
     	this.handleResponseFormat = this.handleResponseFormat.bind(this);
     	this.handleQuestionInput = this.handleQuestionInput.bind(this);
-
     	this.addOption = this.addOption.bind(this);
     	this.Removequestions = this.Removequestions.bind(this);
     	this.handleOptionChange = this.handleOptionChange.bind(this);
@@ -45,204 +50,175 @@ class NormalAssignment extends React.Component {
     	this.handleOptionScore = this.handleOptionScore.bind(this);
   	}
 
-
   	handleInputChange1(event) {  //Used for text type of inputs
 	    const target = event.target;
 	    const value = target.value;
 	    const name = target.name;
-
 	    this.setState({
 	      [name]: value
 	    });
+		}
 
-	    console.log(this.state);
-	}
-
-	handleMarks(event) {
+		handleMarks(event) {
 	    this.setState({
 	      Marks: event
 	    });
+		}
 
-	    console.log(this.state);
-	}
-
-	handleDuration(event) {
+		handleDuration(event) {
 	    this.setState({
 	      Duration: event
 	    });
-
-    	console.log(this.state);
   	}
 
   	handleChangeMandetory(event){
   		this.setState({
 	  		Mandetory: event
-	  	})
-		console.log(this.state);
+	  	});
   	}
 
   	handleChangeReAttempt(event){
   		this.setState({
 	  		reAttempt: event
-	  	})
-		console.log(this.state);
+	  	});
   	}
 
   	handleChangeLock(event){
 	  	this.setState({
 	  		Lock: event
-	  	})
-    	console.log(this.state);
-    
+	  	});
   	}
 
   	addLockLesson(){
-  	
-	  	var array = this.state.LockLessons;
+	  	let array = this.state.LockLessons;
 	  	array.push(1);
 	  	this.setState({
-	  		LockLessons : array 
-  		})
-  		console.log('Should be Added',this.state);
-
-
+	  		LockLessons : array
+  		});
   	}
 
   	handlePassingMarks(event){
   		this.setState({
 	  		PassingMarks: event
-	  	})
-    	console.log(this.state);
+	  	});
   	}
 
   	handleLockedLessons(event, index){
-		var array = this.state.LockLessons;
+		let array = this.state.LockLessons;
   		array[index] = event;
   		this.setState({
   			LockLessons : array
-  		})
-  		console.log('Value Should be Changed at'+index,this.state);
+  		});
   	}
 
   	handleRemoveLockLessons(index){
-  		var array = this.state.LockLessons;
-  		if(array.length ===1)
-  			return;
-
+  		let array = this.state.LockLessons;
+  		if(array.length === 1) {
+				return;
+			}
   		array = array.filter((key,i) => i!==index);
   		this.setState({
   			LockLessons : array
-  		} )	
-  		console.log('Should be Deleted at'+index,this.state);
-
+  		});
   	}
 
   	addMCQ(){
-  		var array = this.state.questions;
-  		var obj2 = {
+  		let array = this.state.questions;
+  		let obj2 = {
   			correct: false,
   			relativeScore: 0,
   			text: ''
   		}
-  		var obj = {
+  		let obj = {
   			type: 1,
   			question: '',
   			options: [obj2 ,obj2],
   			rtype: 0
   		}
   		array.push(obj);
-
   		this.setState({
-  			questions : array
-  		})
-
-  		console.log(array)
+  			questions : array,
+  		});
   	}
 
   	addNormalQuestion(){
-  		var array = this.state.questions;
-  		var obj = {
+  		let array = this.state.questions;
+  		let obj = {
   			type: 2,
   			question: '',
   			options: [],
   			rtype: 1
   		}
   		array.push(obj);
-
   		this.setState({
-  			questions : array
-  		})
+  			questions : array,
+  		});
   	}
 
   	Removequestions(index){
-  		var array = this.state.questions;
-  		if(array.length ===1)
-  			return;
-
+  		let array = this.state.questions;
+  		if(array.length === 1) {
+				return;
+			}
   		array = array.filter((key,i) => i!==index);
   		this.setState({
-  			questions : array
-  		} )	
-  		console.log('QUestion Should be Deleted at'+index,this.state);
+  			questions : array,
+  		});
   	}
 
   	handleResponseFormat(event,index){
-  		var array = this.state.questions;
+  		let array = this.state.questions;
   		array[index].rtype = event.target.value;
   		this.setState({
   			questions : array
-  		})
-
-  		console.log(this.state.questions);
+  		});
   	}
 
   	handleQuestionInput(event,index){
-  		var array = this.state.questions;
+  		let array = this.state.questions;
   		array[index].question = event.target.value;
   		this.setState({
-  			questions : array
-  		})
+  			questions : array,
+  		});
   	}
 
   	addOption(event,index){
-  		var array = this.state.questions;
-  		var obj2 = {
+  		let array = this.state.questions;
+  		let obj2 = {
   			correct: false,
   			relativeScore: 0,
   			text: ''
   		}
   		array[index].options.push(obj2);
-
   		this.setState({
-  			questions : array
-  		})
+  			questions : array,
+  		});
   	}
 
   	RemoveOptions(i,j){
-  		var array = this.state.questions;
-  		var question = array[i];
-		var options = question.options.filter((key,ind) => ind!==j);
-		array[i].options = options;
-
-		this.setState({
-			questions : array
-		})
+  		let array = this.state.questions;
+  		let question = array[i];
+			let options = question.options.filter((key,ind) => ind!==j);
+			array[i].options = options;
+			this.setState({
+				questions : array
+			});
   	}
 
   	handleOptionChange(event,i,j){
-  		var array = this.state.questions;
+  		let array = this.state.questions;
   		array[i].options[j].text = event.target.value;
   		this.setState({
   			questions: array
-  		})
+  		});
   	}
 
   	handleOptionCheck(event,i,j){
-  		var array = this.state.questions;
+  		let array = this.state.questions;
   		array[i].options[j].correct = event;
   		this.setState({
-  			questions: array
-  		})
+  			questions: array,
+  		});
   	}
 
   	handleOptionScore(event,i,j){
@@ -253,62 +229,89 @@ class NormalAssignment extends React.Component {
   		})
   	}
 
-  	render(){
-  	    var ll = this.state.LockLessons;
-  	    var questions = this.state.questions;
-  	    return (
+  	render() {
+	    let ll = this.state.LockLessons;
+	    let questions = this.state.questions;
+	    return (
 	  		<div>
 		      <h2> Normal Assignment Form</h2>
 		      <form>
 		        <label>
-		       	Assignment Name:
-		        	<Input name="AssignName" defaultValue = {this.state.AssignName} placeholder="Enter Lesson Name Here" onChange={this.handleInputChange1}/> 	
+		       		Assignment Name:
+		        	<Input
+								name="AssignName"
+								defaultValue={this.state.AssignName}
+								placeholder="Enter Lesson Name Here"
+								onChange={this.handleInputChange1}
+							/>
 		        </label>
 		        <label>
-		        Maximum Marks:
-		        	<InputNumber name="Marks" min={0} max={100000} defaultValue={this.state.Marks} onChange={this.handleMarks} />
+		        	Maximum Marks:
+		        	<InputNumber
+								name="Marks"
+								min={0}
+								max={100000}
+								defaultValue={this.state.Marks}
+								onChange={this.handleMarks}
+							/>
 		        </label>
 		        <br />
 		        <div>
 			        <label>
 			        	Add Questions for this assignment:<br />
 			        	{
-			        		questions.map(function(q,index){
+			        		questions.map((q,index) => {
 			        			return(
 			        				<span key={index}>
 			        					<label>
 			        						Question {index+1}:
-			        						<Input defaultValue={q.question} placeholder="Enter Question Text Here" onChange={(e)=>this.handleQuestionInput(e,index)}> 
-			        						</Input>
-
-			        					</label><br />
-			        					<Icon type="minus-circle-o" onClick={()=>this.Removequestions(index)} disabled={questions.length===1}> </Icon>
+			        						<Input
+														defaultValue={q.question}
+														placeholder="Enter Question Text Here"
+														onChange={(e)=>this.handleQuestionInput(e,index)}
+													/>
+			        					</label>
+												<br />
+			        					<Icon
+													type="minus-circle-o"
+													onClick={()=>this.Removequestions(index)}
+													disabled={questions.length===1}
+												/>
 			        					{
-			        						(q.type===1)?
+			        						(q.type === 1) ?
 			        						 <span> Add Options here. <br/>Check the option if they are the correct Choices. <br/>Enter Relative Score for each.<br/>
 												{
 													q.options.map(function(option,ind){
 														return(
 															<span>
-																
 																Option {ind+1} :
-																<Input defaultValue={option.text}  onChange={(e)=>this.handleOptionChange(e,index,ind)}>
-																</Input>
-																
-																<Checkbox defaultValue={option.correct} onChange={(e)=>this.handleOptionCheck(e,index,ind)}/>
-																<InputNumber defaultValue={option.relativeScore} onChange={(e)=>this.handleOptionScore(e,index,ind)}/> 
-																<Icon type="minus-circle-o" onClick={()=>this.RemoveOptions(index,ind)} disabled={questions.length===2}> </Icon>
+																<Input
+																	defaultValue={option.text}
+																	onChange={(e)=>this.handleOptionChange(e,index,ind)}
+																/>
+																<Checkbox
+																	defaultValue={option.correct}
+																	onChange={(e)=>this.handleOptionCheck(e,index,ind)}
+																/>
+																<InputNumber
+																	defaultValue={option.relativeScore}
+																	onChange={(e)=>this.handleOptionScore(e,index,ind)}
+																/>
+																<Icon
+																	type="minus-circle-o"
+																	onClick={()=>this.RemoveOptions(index,ind)}
+																	disabled={questions.length===2}
+																/>
 																<br />
 															</span>
-
 														);
 													},this)
 												}
-				        						<Button type="dashed" onClick={(e)=>this.addOption(e,index)}>
-				        							<Icon type="plus"/>Add Option
-				        						</Button>
-				        						<br/>
-			        						 </span>: 
+		        						<Button type="dashed" onClick={(e)=>this.addOption(e,index)}>
+		        							<Icon type="plus"/>Add Option
+		        						</Button>
+				        				<br/>
+			        					</span>:
 			        						 <span>
 			        						 	<RadioGroup onChange={(e)=>this.handleResponseFormat(e,index)} value={q.rtype}>
 											        <Radio value={1}>Text</Radio>
@@ -316,7 +319,7 @@ class NormalAssignment extends React.Component {
 											        <Radio value={3}>Audio</Radio>
 											        <Radio value={4}>Video</Radio>
 										      	</RadioGroup><br/>
-			        						 </span>
+			        					</span>
 			        					}
 			        				</span>
 			        			);
@@ -325,63 +328,101 @@ class NormalAssignment extends React.Component {
 			        	<Button type="dashed" onClick={this.addMCQ}>
 				        	<Icon type="plus"/>Add Multiple Choice Question
 				        </Button>
-				         or  
+				         or
 				        <Button type="dashed" onClick={this.addNormalQuestion}>
 				        	<Icon type="plus"/>Add Normal Question
 				        </Button>
 
 			        </label>
 		        </div>
-		        
 		        <label>
 		        	<h3>Other Details of the Lesson</h3>
 		        </label>
-
 		        <label>
-		        Minimum passing marks:
-		        	<InputNumber name="PassingMarks" min={0} max={100000} defaultValue={this.state.PassingMarks} onChange={this.handlePassingMarks} />
+		        	Minimum passing marks:
+		        	<InputNumber
+								name="PassingMarks"
+								min={0}
+								max={100000}
+								defaultValue={this.state.PassingMarks}
+								onChange={this.handlePassingMarks}
+							/>
 		        </label>
-
 		        <label>
-		        Skills:
-		        	<Input name="Skills" type="textarea" placeholder="Enter Skills that this lesson Addresses" autosize onChange={this.handleInputChange1}/>
+		        	Skills:
+		        	<Input
+								name="Skills"
+								type="textarea"
+								placeholder="Enter Skills that this lesson Addresses"
+								autosize
+								onChange={this.handleInputChange1}
+							/>
 		        </label>
-
 		        <label>
-		        Duration:
-		        	<InputNumber name="Duration" min={0} max={100000} defaultValue={this.state.Duration} onChange={this.handleDuration} />
+		        	Duration:
+		        	<InputNumber
+								name="Duration"
+								min={0}
+								max={100000}
+								defaultValue={this.state.Duration}
+								onChange={this.handleDuration}
+							/>
 		        </label>
 		        <br />
 		        <label>
-		        Mandetory: 
-					<Switch name="Mandetory" checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} defaultChecked={this.state.Mandetory} onChange={this.handleChangeMandetory} />	
+		        	Mandetory:
+							<Switch
+								name="Mandetory"
+								checkedChildren={<Icon type="check" />}
+								unCheckedChildren={<Icon type="close" />}
+								defaultChecked={this.state.Mandetory}
+								onChange={this.handleChangeMandetory}
+							/>
 		        </label>
 		        <br />
 		        <label>
-		        Re-Attempt: 
-					<Switch name="reAttempt" checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} defaultChecked={this.state.reAttempt} onChange={this.handleChangeReAttempt} />	
+		        	Re-Attempt:
+							<Switch
+								name="reAttempt"
+								checkedChildren={<Icon type="check" />}
+								unCheckedChildren={<Icon type="close" />}
+								defaultChecked={this.state.reAttempt}
+								onChange={this.handleChangeReAttempt}
+							/>
 		        </label>
 		        <br />
 		        <label>
-		        Lock the Lesson: 
-					<Switch name="Lock" checkedChildren={<Icon type="lock" />} unCheckedChildren={<Icon type="unlock"  />} defaultChecked={this.state.Lock} onChange={this.handleChangeLock}/>	
+		        	Lock the Lesson:
+							<Switch
+								name="Lock"
+								checkedChildren={<Icon type="lock" />}
+								unCheckedChildren={<Icon type="unlock"  />}
+								defaultChecked={this.state.Lock}
+								onChange={this.handleChangeLock}
+							/>
 		        </label>
-		        {this.state.Lock && 
+		        {
+							this.state.Lock &&
 		        	<div>
-		        		
-		        		
 			        	<label>
 			        		Lessons To Unlock this Lesson<br />
-			        		{   
-			        			ll.map(function(item,index){
+			        		{
+			        			ll.map((item,index) => {
 				        			return (
 				        				<span key={index}>
-					        				<label>	
+					        				<label>
 					        				Section No.
-					        					<InputNumber min={0} step={0.01} onChange={(e)=>this.handleLockedLessons(e,index)}/>
+					        					<InputNumber
+															min={0}
+															step={0.01}
+															onChange={(e)=>this.handleLockedLessons(e,index)}
+														/>
 					        				</label>
-					        				<Icon type="minus-circle-o" onClick={()=>this.handleRemoveLockLessons(index)} disabled={ll.length===1}>
-					        				</Icon>
+					        				<Icon
+														type="minus-circle-o"
+														onClick={()=>this.handleRemoveLockLessons(index)}
+														disabled={ll.length===1}
+													/>
 				        					<br />
 				        				</span>
 				        			);
@@ -389,15 +430,13 @@ class NormalAssignment extends React.Component {
 		        			}
 			        		<br />
 			        		<Button type="dashed" onClick={this.addLockLesson}>
-			        			<Icon type="plus"/>Add Lesson
+			        			<Icon type="plus"/> Add Lesson
 			        		</Button>
-			        		
 			        	</label>
-		        	</div> 
+		        	</div>
 		        }
 		      </form>
-	     	 </div>
-      	)
+	     	</div>
+    	)
   	}
 }
-module.exports = NormalAssignment

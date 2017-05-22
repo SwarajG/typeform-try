@@ -5,10 +5,8 @@ import { Switch } from 'antd';
 import { Radio } from 'antd';
 const RadioGroup = Radio.Group;
 
-
-// Save Data of Dynamic Fields is still to be done
-
-class LearningLesson extends React.Component {
+// Save data of dynamic Fields is still to be done
+export default class LearningLesson extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,7 +23,6 @@ class LearningLesson extends React.Component {
 
     this.handleInputChange1 = this.handleInputChange1.bind(this);
     this.handleDuration = this.handleDuration.bind(this);
-
     this.handleChangeOptional = this.handleChangeOptional.bind(this);
     this.handleChangeLock = this.handleChangeLock.bind(this);
     this.addLockLesson = this.addLockLesson.bind(this);
@@ -39,164 +36,173 @@ class LearningLesson extends React.Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-
     this.setState({
       [name]: value
     });
-
-    console.log(this.state);
   }
   handleDuration(event) {
     this.setState({
       Duration: event
     });
-
-    console.log(this.state);
   }
 
   handleChangeOptional(event){
-  	
     this.setState({
   		Optional: event
-  	})
-    
-
+  	});
   }
 
   handleChangeLock(event){
   	this.setState({
   		Lock: event
-  	})
-    console.log(this.state);
-    
+  	});
   }
 
   addLockLesson(){
-  	
-  	var array = this.state.LockLessons;
+  	let array = this.state.LockLessons;
   	array.push(1);
   	this.setState({
-  		LockLessons : array 
-  	})
-
+  		LockLessons : array
+  	});
   }
 
-
-    handleLockedLessons(event, index){
-
-        var array = this.state.LockLessons;
-        array[index] = event;
-        this.setState({
-            LockLessons : array
-        })
-        console.log(this.state);
-    }
+  handleLockedLessons(event, index){
+    let array = this.state.LockLessons;
+    array[index] = event;
+    this.setState({
+        LockLessons : array
+    });
+  }
 
     handleRemoveLockLessons(index){
-        var array = this.state.LockLessons;
-        if(array.length ===1)
-            return;
-
-        array = array.filter((key,i) => key!==index);
-        this.setState({
-            LockLessons : array
-        })  
+      let array = this.state.LockLessons;
+      if(array.length === 1) {
+        return;
+      }
+      array = array.filter((key,i) => key!==index);
+      this.setState({
+          LockLessons : array
+      });
     }
 
-    handleContentRF(event){  //RF  - Response Format
-        this.setState({
-            contentRF : event.target.value
-        })
+    handleContentRF(e){  //RF  - Response Format
+      this.setState({
+        contentRF : e.target.value,
+      });
     }
 
-    handleContentValue(event){  //RF  - Response Format
-        this.setState({
-            contentValue : event.target.value
-        })
+    handleContentValue(e){  //RF  - Response Format
+      this.setState({
+        contentValue : e.target.value,
+      });
     }
 
     render() {
-    
-    var ll = this.state.LockLessons;
-    console.log(ll);
-    return (
+      let ll = this.state.LockLessons;
+      return (
         <div>
-            <h2> Lerning Lesson Form</h2>
-            <form>
+          <h2> Lerning Lesson Form</h2>
+          <form>
             <label>
             	Lesson Name:
-            	<Input name="LessonName" defaultValue = {this.state.LessonName} placeholder="Enter Lesson Name Here" onChange={this.handleInputChange1}/> 	
+            	<Input name="LessonName" defaultValue = {this.state.LessonName} placeholder="Enter Lesson Name Here" onChange={this.handleInputChange1}/>
             </label>
             <label>
-            Add Learning Content here:<br/>
-            Select How will You Add content:
+              Add Learning Content here:<br/>
+              Select How will You Add content:
                 <RadioGroup onChange={this.handleContentRF} value={this.state.contentRF}>
                     <Radio value={1}>Text</Radio>
                     <Radio value={2}>Image</Radio>
                     <Radio value={3}>Audio</Radio>
                     <Radio value={4}>Video</Radio>
                  </RadioGroup><br/>
-            Add Content or its link
-                <Input defaultValue={this.contentValue} onChange={this.handleContentValue}/>
+              Add Content or its link
+                <Input
+                  defaultValue={this.contentValue}
+                  onChange={this.handleContentValue}
+                />
             </label>
-
             <label>
             	<h3>Other Details of the Lesson</h3>
             </label>
-
             <label>
-            Skills:
-            	<Input name="Skills" type="textarea" placeholder="Enter Skills that this lesson Addresses" autosize onChange={this.handleInputChange1}/>
+              Skills:
+            	<Input
+                name="Skills"
+                type="textarea"
+                placeholder="Enter Skills that this lesson Addresses"
+                autosize
+                onChange={this.handleInputChange1}
+              />
             </label>
-
             <label>
-            Duration:
-            	<InputNumber name="Duration" min={0} max={100000} defaultValue={this.state.Duration} onChange={this.handleDuration} />
+              Duration:
+            	<InputNumber
+                name="Duration"
+                min={0}
+                max={100000}
+                defaultValue={this.state.Duration}
+                onChange={this.handleDuration}
+              />
             </label>
             <br />
             <label>
-            Optional: 
-            	<Switch name="Optional" checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} defaultChecked={this.state.Optional} onChange={this.handleChangeOptional} />	
+              Optional:
+            	<Switch
+                name="Optional"
+                checkedChildren={<Icon type="check" />}
+                unCheckedChildren={<Icon type="close" />}
+                defaultChecked={this.state.Optional}
+                onChange={this.handleChangeOptional}
+              />
             </label>
             <br />
             <label>
-            Lock the Lesson: 
-            	<Switch name="Lock" checkedChildren={<Icon type="lock" />} unCheckedChildren={<Icon type="unlock"  />} defaultChecked={this.state.Lock} onChange={this.handleChangeLock}/>	
+              Lock the Lesson:
+            	<Switch
+                name="Lock"
+                checkedChildren={<Icon type="lock" />}
+                unCheckedChildren={<Icon type="unlock"  />}
+                defaultChecked={this.state.Lock}
+                onChange={this.handleChangeLock}
+              />
             </label>
-            {this.state.Lock && 
+            {
+              this.state.Lock &&
             	<div>
-            		
-            		
                 	<label>
                 		Lessons To Unlock this Lesson<br />
-                		{   
-                			ll.map(function(item,index){
+                		{
+                			ll.map((item,index) => {
                 			return (
                 				<span key={index}>
-                                    <label> 
-                                    Section No.
-                                        <InputNumber min={0} step={0.01} onChange={(e)=>this.handleLockedLessons(e,index)}/>
-                                    </label>
-                                    <Icon type="minus-circle-o" onClick={()=>this.handleRemoveLockLessons(index)} disabled={ll.length===1}>
-                                    </Icon>
-                                    <br />
-                                </span>
+                          <label>
+                            Section No.
+                            <InputNumber
+                              min={0}
+                              step={0.01}
+                              onChange={(e)=>this.handleLockedLessons(e,index)}
+                            />
+                          </label>
+                          <Icon
+                            type="minus-circle-o"
+                            onClick={()=>this.handleRemoveLockLessons(index)}
+                            disabled={ll.length===1}
+                          />
+                          <br />
+                        </span>
                 			);
                 			},this)
-                        }
+                    }
                 		<br />
                 		<Button type="dashed" onClick={this.addLockLesson}>
-                			<Icon type="plus"/>Add Lesson Number
+                			<Icon type="plus"/> Add Lesson Number
                 		</Button>
                 	</label>
-            	</div> 
+            	</div>
             }
-            </form>
+          </form>
         </div>
-    );
-  }
+      );
+    }
 }
-
-
-
-module.exports = LearningLesson

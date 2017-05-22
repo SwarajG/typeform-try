@@ -10,6 +10,9 @@ import {
   Input,
 } from 'antd';
 import ItemTypes from './ItemTypes';
+import LearningLesson from './LearningLesson';
+import NormalAssignment from './NormalAssignment';
+import PeerAssignment from './PeerAssignment';
 
 const style = {
   border: '1px solid',

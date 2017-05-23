@@ -72,7 +72,7 @@ export default class Container extends Component {
     const id = this.getUniqueIdForCard();
     if (cardList.length === 0 && item.name !== 'Section') {
       this.error();
-      return ;
+      return;
     }
     let findSection = false;
     let indexForNewCard;
@@ -161,11 +161,11 @@ export default class Container extends Component {
         icon: "copy",
       },
       {
-        name: "Learning assignment",
+        name: "Learning card",
         icon: "book",
       },
       {
-        name: "Quiz assignment",
+        name: "Normal assignment",
         icon: "save",
       },
     ];

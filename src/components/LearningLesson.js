@@ -20,30 +20,20 @@ export default class LearningLesson extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      LessonName: '',   //this.props.LessonName
+      lessonName: '',   //this.props.LessonName
       numberOfGuests: 2,
-      Skills: '',
-      Duration: '',
-      Optional: false,
-      Lock: true,
-      LockLessons: [],
+      skills: '',
+      duration: '',
+      optional: false,
+      lock: true,
+      lockLessons: [],
       contentRF: 0,
       contentValue : ''
     }
-
-    this.handleInputChange1 = this.handleInputChange1.bind(this);
-    this.handleDuration = this.handleDuration.bind(this);
-    this.handleChangeOptional = this.handleChangeOptional.bind(this);
-    this.handleChangeLock = this.handleChangeLock.bind(this);
-    this.addLockLesson = this.addLockLesson.bind(this);
-    this.handleLockedLessons = this.handleLockedLessons.bind(this);
-    this.handleRemoveLockLessons = this.handleRemoveLockLessons.bind(this);
-    this.handleContentRF = this.handleContentRF.bind(this);
-    this.handleContentValue = this.handleContentValue.bind(this);
   }
 
-  handleInputChange1(event) {  //Used for text type of inputs
-    const target = event.target;
+  handleInputChange(e) {  //Used for text type of inputs
+    const target = e.target;
     const value = target.value;
     const name = target.name;
     this.setState({
@@ -53,35 +43,35 @@ export default class LearningLesson extends React.Component {
 
   handleDuration(e) {
     this.setState({
-      Duration: e,
+      duration: e,
     });
   }
 
   handleChangeOptional(e) {
     this.setState({
-  		Optional: e,
+  		optional: e,
   	});
   }
 
   handleChangeLock(e) {
   	this.setState({
-  		Lock: e,
+  		lock: e,
   	});
   }
 
   addLockLesson() {
-  	let array = this.state.LockLessons;
+  	let array = this.state.lockLessons;
   	array.push(1);
   	this.setState({
-  		LockLessons : array,
+  		lockLessons : array,
   	});
   }
 
   handleLockedLessons(e, index) {
-    let array = this.state.LockLessons;
+    let array = this.state.lockLessons;
     array[index] = e;
     this.setState({
-        LockLessons : array,
+      lockLessons : array,
     });
   }
 
@@ -92,7 +82,7 @@ export default class LearningLesson extends React.Component {
     }
     array = array.filter((key,i) => key!==index);
     this.setState({
-        LockLessons : array,
+      lockLessons : array,
     });
   }
 
@@ -108,8 +98,13 @@ export default class LearningLesson extends React.Component {
     });
   }
 
+  submitForm = () => {
+    let formData = {};
+    this.props.formSubmit(formData);
+  }
+
   render() {
-    let ll = this.state.LockLessons;
+    let ll = this.state.lockLessons;
     return (
       <div>
         <h2 style={{ backgroundColor: '#bdc3c7', padding: '10px', color: '#34495e', marginBottom: '10px' }}>Lerning Lesson Form</h2>
@@ -119,9 +114,9 @@ export default class LearningLesson extends React.Component {
           	<Input
               name="LessonName"
               className="label__input"
-              defaultValue={this.state.LessonName}
+              defaultValue={this.state.lessonName}
               placeholder="Enter lesson name here"
-              onChange={this.handleInputChange1}
+              onChange={() => this.handleInputChange()}
             />
           </label>
           <br />
@@ -130,7 +125,7 @@ export default class LearningLesson extends React.Component {
             <span className="label__title">Select how will you add content: </span>
             <br />
             <RadioGroup
-              onChange={this.handleContentRF}
+              onChange={(e) => this.handleContentRF(e)}
               value={this.state.contentRF}
               className="label__input"
             >
@@ -145,7 +140,7 @@ export default class LearningLesson extends React.Component {
               <Input
                 className="label__input"
                 defaultValue={this.contentValue}
-                onChange={this.handleContentValue}
+                onChange={() => this.handleContentValue()}
               />
           </label>
           <label>
@@ -160,7 +155,7 @@ export default class LearningLesson extends React.Component {
               className="label__textarea"
               placeholder="Enter skills that this lesson addresses"
               autosize
-              onChange={this.handleInputChange1}
+              onChange={() => this.handleInputChange()}
             />
           </label>
           <br />
@@ -171,8 +166,8 @@ export default class LearningLesson extends React.Component {
               className="label__input"
               min={0}
               max={100000}
-              defaultValue={this.state.Duration}
-              onChange={this.handleDuration}
+              defaultValue={this.state.duration}
+              onChange={() => this.handleDuration()}
             />
           </label>
           <br />
@@ -183,8 +178,8 @@ export default class LearningLesson extends React.Component {
               className="label__input"
               checkedChildren={<Icon type="check" />}
               unCheckedChildren={<Icon type="close" />}
-              defaultChecked={this.state.Optional}
-              onChange={this.handleChangeOptional}
+              defaultChecked={this.state.optional}
+              onChange={(e) => this.handleChangeOptional(e)}
             />
           </label>
           <br />
@@ -195,44 +190,53 @@ export default class LearningLesson extends React.Component {
               className="label__input"
               checkedChildren={<Icon type="lock" />}
               unCheckedChildren={<Icon type="unlock"  />}
-              defaultChecked={this.state.Lock}
-              onChange={this.handleChangeLock}
+              defaultChecked={this.state.lock}
+              onChange={(e) => this.handleChangeLock(e)}
             />
           </label>
           {
-            this.state.Lock &&
+            this.state.lock &&
           	<div>
-              	<label>
-                  <span className="label__title">Lessons to unlock this lesson</span>
-              		<br />
-              		{
-              			ll.map((item,index) => {
-              			return (
-              				<span key={index}>
-                        <label>
-                          <span className="label__title">Section no. </span>
-                          <InputNumber
-                            className="label__input"
-                            min={0}
-                            step={0.01}
-                            onChange={(e)=>this.handleLockedLessons(e,index)}
-                          />
-                        </label>
-                        <Icon
-                          type="minus-circle-o"
-                          onClick={()=>this.handleRemoveLockLessons(index)}
-                          disabled={ll.length===1}
+            	<label>
+                <span className="label__title">Lessons to unlock this lesson</span>
+            		<br />
+            		{
+            			ll.map((item,index) => {
+            			return (
+            				<span key={index}>
+                      <label>
+                        <span className="label__title">Section no. </span>
+                        <InputNumber
+                          className="label__input"
+                          min={0}
+                          step={0.01}
+                          onChange={(e) => this.handleLockedLessons(e,index)}
                         />
-                        <br />
-                      </span>
-              			);
-              			},this)
-                  }
-              		<br />
-              		<Button type="dashed" onClick={this.addLockLesson}>
-              			<Icon type="plus"/> Add lesson number
-              		</Button>
-              	</label>
+                      </label>
+                      <Icon
+                        type="minus-circle-o"
+                        onClick={() => this.handleRemoveLockLessons(index)}
+                        disabled={ll.length===1}
+                      />
+                      <br />
+                    </span>
+            			);
+            			},this)
+                }
+            		<br />
+            		<Button type="dashed" onClick={() => this.addLockLesson()}>
+            			<Icon type="plus"/> Add lesson number
+            		</Button>
+            	</label>
+              <br />
+              <Button
+                type="primary"
+                size="large"
+                style={{ marginTop: '15px' }}
+                onClick={() => this.submitForm()}
+              >
+								Submit
+							</Button>
           	</div>
           }
         </form>

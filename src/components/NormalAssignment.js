@@ -19,19 +19,18 @@ export default class NormalAssignment extends React.Component {
 	constructor(props) {
     	super(props);
     	this.state={
-    		AssignName : '',
-    		Marks: 0,
-    		Skills: '',
-    		Duration: 0,
-    		Mandetory: false,
+    		assignmentName : '',
+    		marks: 0,
+    		skills: '',
+    		duration: 0,
+    		mandetory: false,
     		reAttempt: false,
-    		Lock: false,
-    		LockLessons: [0],
-    		PassingMarks: 0,
+    		lock: false,
+    		lockLessons: [0],
+    		passingMarks: 0,
     		questions: []
     	}
-    	this.handleInputChange1 = this.handleInputChange1.bind(this);
-    	this.handleMarks = this.handleMarks.bind(this);
+
     	this.handleDuration = this.handleDuration.bind(this);
     	this.handleChangeMandetory = this.handleChangeMandetory.bind(this);
     	this.handleChangeReAttempt = this.handleChangeReAttempt.bind(this);
@@ -52,7 +51,7 @@ export default class NormalAssignment extends React.Component {
     	this.handleOptionScore = this.handleOptionScore.bind(this);
   	}
 
-  	handleInputChange1(event) {  //Used for text type of inputs
+  	handleInputChange(event) {  //Used for text type of inputs
 	    const target = event.target;
 	    const value = target.value;
 	    const name = target.name;
@@ -63,19 +62,19 @@ export default class NormalAssignment extends React.Component {
 
 		handleMarks(event) {
 	    this.setState({
-	      Marks: event
+	      marks: event
 	    });
 		}
 
 		handleDuration(event) {
 	    this.setState({
-	      Duration: event
+	      duration: event
 	    });
   	}
 
   	handleChangeMandetory(event){
   		this.setState({
-	  		Mandetory: event
+	  		mandetory: event
 	  	});
   	}
 
@@ -87,40 +86,40 @@ export default class NormalAssignment extends React.Component {
 
   	handleChangeLock(event){
 	  	this.setState({
-	  		Lock: event
+	  		lock: event,
 	  	});
   	}
 
   	addLockLesson(){
-	  	let array = this.state.LockLessons;
+	  	let array = this.state.lockLessons;
 	  	array.push(1);
 	  	this.setState({
-	  		LockLessons : array
+	  		lockLessons : array
   		});
   	}
 
   	handlePassingMarks(event){
   		this.setState({
-	  		PassingMarks: event
+	  		passingMarks: event
 	  	});
   	}
 
   	handleLockedLessons(event, index){
-		let array = this.state.LockLessons;
+		let array = this.state.lockLessons;
   		array[index] = event;
   		this.setState({
-  			LockLessons : array
+  			lockLessons : array
   		});
   	}
 
   	handleRemoveLockLessons(index){
-  		let array = this.state.LockLessons;
+  		let array = this.state.lockLessons;
   		if(array.length === 1) {
 				return;
 			}
   		array = array.filter((key,i) => i!==index);
   		this.setState({
-  			LockLessons : array
+  			lockLessons : array
   		});
   	}
 
@@ -232,7 +231,7 @@ export default class NormalAssignment extends React.Component {
   	}
 
   	render() {
-	    let ll = this.state.LockLessons;
+	    let ll = this.state.lockLessons;
 	    let questions = this.state.questions;
 	    return (
 	  		<div>
@@ -243,9 +242,9 @@ export default class NormalAssignment extends React.Component {
 		        	<Input
 								name="AssignName"
 								className="label__input"
-								defaultValue={this.state.AssignName}
+								defaultValue={this.state.assignmentName}
 								placeholder="Enter lesson name here"
-								onChange={this.handleInputChange1}
+								onChange={this.handleInputChange}
 							/>
 		        </label>
 						<br />
@@ -256,8 +255,8 @@ export default class NormalAssignment extends React.Component {
 								className="label__input"
 								min={0}
 								max={100000}
-								defaultValue={this.state.Marks}
-								onChange={this.handleMarks}
+								defaultValue={this.state.marks}
+								onChange={() => this.handleMarks()}
 							/>
 		        </label>
 		        <br />
@@ -358,7 +357,7 @@ export default class NormalAssignment extends React.Component {
 								className="label__input"
 								min={0}
 								max={100000}
-								defaultValue={this.state.PassingMarks}
+								defaultValue={this.state.passingMarks}
 								onChange={this.handlePassingMarks}
 							/>
 		        </label>
@@ -372,7 +371,7 @@ export default class NormalAssignment extends React.Component {
 								type="textarea"
 								placeholder="Enter Skills that this lesson Addresses"
 								autosize
-								onChange={this.handleInputChange1}
+								onChange={this.handleInputChange}
 							/>
 		        </label>
 						<br />
@@ -383,7 +382,7 @@ export default class NormalAssignment extends React.Component {
 								className="label__input"
 								min={0}
 								max={100000}
-								defaultValue={this.state.Duration}
+								defaultValue={this.state.duration}
 								onChange={this.handleDuration}
 							/>
 		        </label>
@@ -395,7 +394,7 @@ export default class NormalAssignment extends React.Component {
 								className="label__input"
 								checkedChildren={<Icon type="check" />}
 								unCheckedChildren={<Icon type="close" />}
-								defaultChecked={this.state.Mandetory}
+								defaultChecked={this.state.mandetory}
 								onChange={this.handleChangeMandetory}
 							/>
 		        </label>
@@ -419,12 +418,12 @@ export default class NormalAssignment extends React.Component {
 								className="label__input"
 								checkedChildren={<Icon type="lock" />}
 								unCheckedChildren={<Icon type="unlock"  />}
-								defaultChecked={this.state.Lock}
+								defaultChecked={this.state.lock}
 								onChange={this.handleChangeLock}
 							/>
 		        </label>
 		        {
-							this.state.Lock &&
+							this.state.lock &&
 		        	<div>
 			        	<label>
 									<span className="label__title">Lessons to unlock this lesson</span>
@@ -457,6 +456,10 @@ export default class NormalAssignment extends React.Component {
 			        			<Icon type="plus"/> Add lesson
 			        		</Button>
 			        	</label>
+								<br />
+								<Button type="primary" size="large" style={{ marginTop: '15px' }}>
+									Submit
+								</Button>
 		        	</div>
 		        }
 		      </form>

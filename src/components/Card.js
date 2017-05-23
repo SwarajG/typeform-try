@@ -13,6 +13,7 @@ import ItemTypes from './ItemTypes';
 import LearningLesson from './LearningLesson';
 import NormalAssignment from './NormalAssignment';
 import PeerAssignment from './PeerAssignment';
+import PreviewScreen from './PreviewScreen';
 import Appcss from '../App.css';
 
 const style = {
@@ -94,10 +95,13 @@ export default class Card extends Component {
 
   constructor() {
     super();
+
+    this.formSubmit = this.formSubmit.bind(this);
+
     this.state = {
       modalVisible: false,
       modalVisibleSection: false,
-      sectionTitle: '',
+      sectionTitle: 'Section',
       modalType: '',
     };
   }
@@ -123,23 +127,17 @@ export default class Card extends Component {
     });
   }
 
-  handleOk = (text, id, titleText) => {
-    if (text === 'Section') {
-      this.setState({
-        modalVisibleSection: false,
-      });
-    } else {
-      this.setState({
-        modalVisible: false,
-      });
-    }
+  handleOk = (type) => {
+    this.setState({
+      modalVisible: false,
+    });
   }
 
   handleCancel = (text) => {
     if (text === 'Section') {
       this.setState({
         modalVisibleSection: false,
-      })
+      });
     } else {
       this.setState({
         modalVisible: false,
@@ -164,7 +162,7 @@ export default class Card extends Component {
   showConfirm = (type, id) => {
     confirm({
       title: 'Want to delete these card?',
-      content: 'This wil delete the card from the list. Are you sure?',
+      content: 'This will delete the card from the list. Are you sure?',
       onOk: () => {
         this.props.deleteCardFromList(type, id);
       },
@@ -184,12 +182,16 @@ export default class Card extends Component {
   getFormComponentFromType = () => {
     const type = this.state.modalType;
     if (type === 'Peer assignment') {
-      return <PeerAssignment />;
-    } else if (type === 'Learning assignment') {
-      return <LearningLesson />;
-    } else if (type === 'Quiz assignment') {
-      return <NormalAssignment />;
+      return <PeerAssignment formSubmit={this.formSubmit} />;
+    } else if (type === 'Learning card') {
+      return <LearningLesson formSubmit={this.formSubmit} />;
+    } else if (type === 'Normal assignment') {
+      return <NormalAssignment formSubmit={this.formSubmit} />;
     }
+  }
+
+  formSubmit = (formData) => {
+    return;
   }
 
   render() {
@@ -204,7 +206,8 @@ export default class Card extends Component {
         <Modal
           visible={this.state.modalVisible}
           wrapClassName="vertical-center-modal"
-          onOk={() => this.handleOk(type)} onCancel={() => this.handleCancel(type)}
+          onOk={() => this.handleOk(type)}
+          onCancel={() => this.handleCancel(type)}
           width={this.getPageWidth() - 60}
           style={{ margin: '30px' }}
           footer={null}
@@ -218,7 +221,7 @@ export default class Card extends Component {
               </div>
             </Col>
             <Col span={16}>
-              Hello World. This will be the Preview part.
+              <PreviewScreen />
             </Col>
           </Row>
         </Modal>
@@ -236,7 +239,7 @@ export default class Card extends Component {
         <div
           style={{ display: 'flex' }}
         >
-          <div style={{ padding: '10px', marginRight: '10px', display: 'inline-block', border: '1px solid', marginLeft: marginLeft, height: '100%', borderRadius: '3px', }}>
+          <div style={{ padding: '10px', marginRight: '10px', display: 'inline-block', border: '1px solid', marginLeft: marginLeft, height: '100%', borderRadius: '3px', minWidth: '40px', }}>
             {this.props.number}
           </div>
           <div

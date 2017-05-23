@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-	Form,
 	Icon,
 	Input,
 	Button,
-	Checkbox,
 	InputNumber,
 	Switch,
 	Radio,
@@ -19,7 +17,7 @@ export default class PeerAssignment extends React.Component {
 
 	constructor(props) {
   	super(props);
-  	this.state={
+  	this.state = {
   		assignmentName : '',
   		marks: 0,
   		skills: '',
@@ -68,9 +66,9 @@ export default class PeerAssignment extends React.Component {
   	});
 	}
 
-	handleChangeLock(event){
+	handleChangeLock(lockStatus){
   	this.setState({
-  		lock: event,
+  		lock: lockStatus,
   	});
 	}
 
@@ -100,27 +98,27 @@ export default class PeerAssignment extends React.Component {
   	});
 	}
 
-	handleLockedLessons(event, index){
+	handleLockedLessons(e, index) {
 		let array = this.state.lockLessons;
-		array[index] = event;
+		array[index] = e;
 		this.setState({
-			lockLessons : array
+			lockLessons : array,
 		});
 	}
 
-	handleRemoveLockLessons(index){
+	handleRemoveLockLessons(index) {
 		let array = this.state.lockLessons;
 		if (array.length === 1) {
 			return;
 		}
-		array = array.filter((key,i) => key!==index);
+		array = array.filter((key,i) => key !== index);
 		this.setState({
 			lockLessons: array,
 		});
 	}
 
 	render(){
-    let ll = this.state.lockLessons;
+    let lockLessons = this.state.lockLessons;
     return (
   		<div>
 	      <h2 style={{ backgroundColor: '#bdc3c7', padding: '10px', color: '#34495e', marginBottom: '10px', }}>Peer Graded Assignment Form</h2>
@@ -165,7 +163,7 @@ export default class PeerAssignment extends React.Component {
 						<span className="label__title">Enter Primary Response Format for the above Question</span>
 						<br />
 	        	<RadioGroup
-							onChange={() => this.handleResponseFormat()}
+							onChange={(event) => this.handleResponseFormat(event)}
 							value={this.state.responseFormat}
 							className="label__input"
 						>
@@ -258,9 +256,9 @@ export default class PeerAssignment extends React.Component {
 							name="Lock"
 							className="label__input"
 							checkedChildren={<Icon type="lock" />}
-							unCheckedChildren={<Icon type="unlock"  />}
+							unCheckedChildren={<Icon type="unlock" />}
 							defaultChecked={this.state.lock}
-							onChange={() => this.handleChangeLock()}
+							onChange={(e) => this.handleChangeLock(e)}
 						/>
 	        </label>
 	        {
@@ -270,7 +268,7 @@ export default class PeerAssignment extends React.Component {
 								<span className="label__title">Lessons to unlock this lesson</span>
 		        		<br />
 		        		{
-		        			ll.map((item,index) => {
+		        			lockLessons.map((item,index) => {
 			        			return (
 			        				<span>
                       	<label>
@@ -285,7 +283,7 @@ export default class PeerAssignment extends React.Component {
                           <Icon
 														type="minus-circle-o"
 														onClick={() => this.handleRemoveLockLessons(index)}
-														disabled={ll.length===1}
+														disabled={lockLessons.length === 1}
 													/>
                           <br />
                       	</span>
@@ -294,7 +292,7 @@ export default class PeerAssignment extends React.Component {
 	        			}
 		        		<br />
 		        		<Button type="dashed" onClick={() => this.addLockLesson()}>
-		        			<Icon type="plus"/>Add lesson number
+		        			<Icon type="plus"/> Add lesson number
 		        		</Button>
 		        	</label>
 							<br />

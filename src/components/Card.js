@@ -26,6 +26,11 @@ const style = {
   width: '300px',
 };
 
+const modalStyle = {
+  top: '0px',
+  margin: '30px',
+}
+
 const cardSource = {
   beginDrag(props) {
     return {
@@ -205,22 +210,21 @@ export default class Card extends Component {
       <div>
         <Modal
           visible={this.state.modalVisible}
-          wrapClassName="vertical-center-modal"
+          style={modalStyle}
           onOk={() => this.handleOk(type)}
           onCancel={() => this.handleCancel(type)}
           width={this.getPageWidth() - 60}
-          style={{ margin: '30px' }}
           footer={null}
         >
           <Row>
-            <Col span={8}>
+            <Col span={10}>
               <div style={{ borderRight: '1px solid', paddingRight: '10px' }}>
                 {
                   this.getFormComponentFromType()
                 }
               </div>
             </Col>
-            <Col span={16}>
+            <Col span={14}>
               <PreviewScreen />
             </Col>
           </Row>

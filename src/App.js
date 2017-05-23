@@ -8,13 +8,14 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 import Container from './components/Container';
+import CreatorEndHome from './components/CreatorEndHome';
 
 class App extends Component {
 
   constructor() {
     super();
     this.state = {
-
+      
     };
   }
 
@@ -22,7 +23,7 @@ class App extends Component {
     return (
       <div className="App">
         <LocaleProvider locale={enUS}>
-          <Container />
+          <CreatorEndHome />
         </LocaleProvider>
       </div>
     );

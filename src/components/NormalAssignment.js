@@ -457,9 +457,14 @@ export default class NormalAssignment extends React.Component {
 			        		</Button>
 			        	</label>
 								<br />
-								<Button type="primary" size="large" style={{ marginTop: '15px' }}>
-									Submit
-								</Button>
+			          <Button
+			            type="primary"
+			            size="large"
+			            style={{ marginTop: '15px' }}
+			            onClick={() => this.submitForm()}
+			          >
+			            Submit
+			          </Button>
 		        	</div>
 		        }
 		      </form>

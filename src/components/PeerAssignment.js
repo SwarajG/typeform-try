@@ -295,12 +295,17 @@ export default class PeerAssignment extends React.Component {
 		        			<Icon type="plus"/> Add lesson number
 		        		</Button>
 		        	</label>
-							<br />
-							<Button type="primary" size="large" style={{ marginTop: '15px', }}>
-								Submit
-							</Button>
 	        	</div>
 	        }
+					<br />
+          <Button
+            type="primary"
+            size="large"
+            style={{ marginTop: '15px' }}
+            onClick={() => this.submitForm()}
+          >
+            Submit
+          </Button>
 	      </form>
      	</div>
   	)

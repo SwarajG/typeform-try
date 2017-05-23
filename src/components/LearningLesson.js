@@ -76,8 +76,9 @@ export default class LearningLesson extends React.Component {
     let formData = {
       name: this.state.lessonName,
       type: this.state.contentRF,
-      contentValue: this.state.contentValue,
+      content: this.state.contentValue,
       duration: this.state.duration,
+      optional: this.state.optional,
     };
     this.props.formSubmit(formData);
   }
@@ -118,7 +119,6 @@ export default class LearningLesson extends React.Component {
              <br />
              <Input
                className="label__input"
-               style={{ width: '400px' }}
                defaultValue={this.contentValue}
                onChange={() => this.handleContentValue()}
              />

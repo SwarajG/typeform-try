@@ -11,10 +11,6 @@ import MyResources from './MyResources';
 
 const TabPane = Tabs.TabPane;
 
-function callback(key) {
-  console.log(key);
-}
-
 export default class CreatorEndHome extends Component {
   constructor(props) {
     super();
@@ -23,9 +19,9 @@ export default class CreatorEndHome extends Component {
   render() {
     return (
       <div>
-        <Tabs defaultActiveKey="1" onChange={callback}>
-          <TabPane tab="Creator end" key="1"><Container /></TabPane>
-          <TabPane tab="My resources" key="2"><MyResources /></TabPane>
+        <Tabs defaultActiveKey="1">
+          <TabPane tab="My resources" key="1"><MyResources /></TabPane>
+          <TabPane tab="Creator end" key="2"><Container /></TabPane>
         </Tabs>
       </div>
     );

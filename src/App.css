@@ -49,3 +49,12 @@
 .ant-modal {
   padding-bottom: 0;
 }
+
+.ant-card-body {
+  padding: 12px;
+}
+
+.childList:hover {
+  background-color: #bdc3c7;
+  color: #2c3e50;
+}

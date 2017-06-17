@@ -26,7 +26,17 @@ export default class MyResources extends Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:8000/list')
+    this.getFolderStructureOnAWS();
+  }
+
+  getFolderStructureOnAWS = () => {
+    fetch('http://localhost:8000/list', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ path: 'dev/lyearn/company1' })
+    })
     .then((response) => response.json())
     .then((response) => {
       this.setState({
@@ -35,7 +45,7 @@ export default class MyResources extends Component {
     });
   }
 
- buildTree = (parts) => {
+  buildTree = (parts) => {
     let lastDir = 'root';
     let abs_path = '';
 
@@ -66,6 +76,7 @@ export default class MyResources extends Component {
     });
     return (
       <FolderStructure
+        getFolderStructureOnAWS={this.getFolderStructureOnAWS}
         fileList={tree}
       />
     );

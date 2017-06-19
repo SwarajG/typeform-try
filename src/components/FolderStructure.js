@@ -9,6 +9,8 @@ import {
   Button,
   message,
   Progress,
+  Modal,
+  Input,
 } from 'antd';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import '../App.css';
@@ -46,6 +48,8 @@ export default class FolderStructure extends Component {
       copied: false,
       progressVisiable: false,
       progress: 0,
+      folderNamevisible: false,
+      folderName: '',
     }
   }
 
@@ -58,6 +62,10 @@ export default class FolderStructure extends Component {
     this.setState({
       currentPath,
     });
+  }
+
+  createFolder = (name) => {
+
   }
 
   uploadToS3 = (s3Url, mp3Data, contentType, uploadProgress) => {
@@ -129,10 +137,6 @@ export default class FolderStructure extends Component {
       progress,
       progressVisiable: true,
     });
-  }
-
-  addNewFolder = () => {
-
   }
 
   fileUploadChange = (e) => {
@@ -241,8 +245,30 @@ export default class FolderStructure extends Component {
 
   showProgress = () => {
     return (
-      <Progress percent={this.state.progress} />
+      <Progress type="circle" percent={this.state.progress} />
     );
+  }
+
+  handleOk = () => {
+    const folderName = this.state.folderName;
+    this.setState({
+      folderNamevisible: false,
+      folderName,
+    });
+  }
+
+  handleCancel = () => {
+    this.setState({
+      folderNamevisible: false,
+      folderName: '',
+    });
+  }
+
+  folderNameChange = (e) => {
+    const folderName = e.target.value;
+    this.setState({
+      folderName,
+    });
   }
 
   render() {
@@ -254,6 +280,17 @@ export default class FolderStructure extends Component {
           progressVisiable && progress &&
           this.showProgress()
         }
+        <Modal
+          visible={this.state.folderNamevisible}
+          onOk={() => this.handleOk()}
+          onCancel={() => this.handleCancel()}
+        >
+          <Input
+            placeholder="Folder name"
+            value={this.state}
+            onChange={(e) => this.folderNameChange(e)}
+          />
+        </Modal>
         <ul style={style.list}>
           <li style={style.list__li} onClick={() => this.backButtonClick()}>
             <Icon type="rollback" style={style.iconStyle} /> Go back
@@ -261,7 +298,7 @@ export default class FolderStructure extends Component {
           <li style={style.list__li} className="childList">
             <Icon type="file-add" style={style.iconStyle} /> Add file
           </li>
-          <li style={style.list__li} className="childList">
+          <li style={style.list__li} className="childList" onClick={() => this.createFolder()}>
             <Icon type="folder-add" style={style.iconStyle} /> Add folder
           </li>
           {

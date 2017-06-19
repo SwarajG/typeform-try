@@ -64,28 +64,24 @@ export default class FolderStructure extends Component {
     });
   }
 
-  createFolder = (name) => {
-
+  createFolder = () => {
+    this.setState({
+      folderNamevisible: true,
+    });
   }
 
   uploadToS3 = (s3Url, mp3Data, contentType, uploadProgress) => {
-
-      var formData = new FormData();
-      //formData.append('fname', fileName);
-      formData.append('data', mp3Data);
-
-      //var file = new File([mp3Data], fileName);
-    console.log("s3 url = ",s3Url);
+    let formData = new FormData();
+    formData.append('data', mp3Data);
 
     return new Promise(
-      // resolve on success, reject on error or non-200
       function(resolve, reject) {
         var xhr = new XMLHttpRequest();
         xhr.open('PUT', s3Url);
         xhr.setRequestHeader('x-amz-acl', 'public-read');
         xhr.setRequestHeader('Content-Type', contentType || 'audio/wav');
         xhr.onreadystatechange = (e) => {
-          if (xhr.readyState !== 4) {//not comoleted
+          if (xhr.readyState !== 4) { //not comoleted
             return;
           }
           if (xhr.status === 200) {
@@ -146,7 +142,6 @@ export default class FolderStructure extends Component {
     event.target.value = null;
     if (!uploadFile) return;
     const fileSize = uploadFile.size / (1000 * 1000);
-    console.log('fileSize', fileSize);
     if (fileSize > 2000) {
       message.warning('File size should not be larger then 2MB, provided file size is ' + fileSize + 'MB...', 0);
       console.log('fileupload:: ', 'File size error');
@@ -251,9 +246,25 @@ export default class FolderStructure extends Component {
 
   handleOk = () => {
     const folderName = this.state.folderName;
+    const name = `${this.state.currentPath}${folderName}/`;
     this.setState({
       folderNamevisible: false,
       folderName,
+    }, () => {
+      fetch('http://localhost:8000/create-folder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name })
+      })
+      .then((response) => {
+        this.setState({
+          folderName: '',
+        });
+        this.props.getFolderStructureOnAWS();
+      })
+      .catch((error) => console.log(error));
     });
   }
 
@@ -287,7 +298,7 @@ export default class FolderStructure extends Component {
         >
           <Input
             placeholder="Folder name"
-            value={this.state}
+            value={this.state.folderName}
             onChange={(e) => this.folderNameChange(e)}
           />
         </Modal>
@@ -307,9 +318,7 @@ export default class FolderStructure extends Component {
             })
           }
         </ul>
-        <form>
-          <input type="file" onChange={(e) => this.fileUploadChange(e)} />
-        </form>
+        <input type="file" onChange={(e) => this.fileUploadChange(e)} />
       </div>
     );
   }

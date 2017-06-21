@@ -44,19 +44,11 @@ const cardTarget = {
   hover(props, monitor, component) {
     const dragIndex = monitor.getItem().index;
     const hoverIndex = props.index;
-
-    // Don't replace items with themselves
     if (dragIndex === hoverIndex) {
       return;
     }
-
-    // Determine rectangle on screen
     const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
-
-    // Get vertical middle
     const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-
-    // Determine mouse position
     const clientOffset = monitor.getClientOffset();
 
     // Get pixels to the top

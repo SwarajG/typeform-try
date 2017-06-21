@@ -54,13 +54,9 @@ const cardTarget = {
     if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
       return;
     }
-
-    // Dragging upwards
     if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
       return;
     }
-
-    // Time to actually perform the action
     props.moveCard(dragIndex, hoverIndex);
 
     // Note: we're mutating the monitor item here!
